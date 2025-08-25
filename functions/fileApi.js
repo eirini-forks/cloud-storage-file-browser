@@ -1,8 +1,5 @@
 const { Storage } = require('@google-cloud/storage')
-const { OAuth2Client } = require('google-auth-library')
 const express = require('express')
-
-const oauthClient = new OAuth2Client(process.env.OAUTH_CLIENT_ID)
 
 const DEFAULT_SETTINGS = {
   defaultPublicFiles: false,
@@ -10,7 +7,7 @@ const DEFAULT_SETTINGS = {
   cdnAdmins: ''
 }
 
-const bucket = new Storage().bucket(process.env.CDN_BUCKET_NAME)
+const bucket = new Storage().bucket('cf-on-k8s-wg-test-bucket')
 const CDN_URL = process.env.CDN_URL || null
 const DASHBOARD_ORIGIN = process.env.DASHBOARD_ORIGIN || '*'
 
@@ -59,31 +56,9 @@ function cors(req, res, next) {
   next()
 }
 
-async function auth(req, res, next) {
-  const idToken = req.headers.authorization && req.headers.authorization.split('Bearer ')[1]
-
-  if (!idToken) return res.status(401).send("no id token")
-
-  try {
-    const userEmail = (await oauthClient.verifyIdToken({
-      idToken: idToken,
-      audience: process.env.OAUTH_CLIENT_ID
-    })).getPayload().email
-
-    if (!CDN_ADMINS.includes(userEmail)) return res.status(403).send("Unauthorized")
-
-    return next()
-  } catch (err) {
-    console.error(err)
-
-    return res.status(403).send("Unauthorized")
-  }
-}
-
 const api = express()
 
 api.use(cors)
-api.use(auth)
 
 api.get('/get-files', (req, res, next) => {
   return bucket.getFiles()
@@ -195,7 +170,7 @@ api.post('/save-settings', async (req, res, next) => {
   return res.json({ success: true })
 })
 
-api.all('*', (req, res) => {
+api.all(/(.*)/, (req, res) => {
   return res.status(404).send('Route not found')
 })
 
