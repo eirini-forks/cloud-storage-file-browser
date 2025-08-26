@@ -4,11 +4,9 @@ import './App.css';
 import { ToastContainer } from 'react-toastify'
 import Sidebar from '../Sidebar/Sidebar'
 import FileExplorer from '../FileExplorer/FileExplorer'
-import Auth from '../GoogleAuth/GoogleAuth'
 import FileUploadModal from '../FileUploadModal/FileUploadModal'
 import FolderCreationModal from '../FolderCreationModal/FolderCreationModal'
 import SettingsModal from '../SettingsModal/SettingsModal'
-import api from '../../api/storage'
 
 function App() {
   const [idToken, setIdToken] = useState('')
@@ -31,10 +29,6 @@ function App() {
           openSettings={() => setSettingsOpen(true)}
         />
       </nav>
-      <Auth setIdToken={(t) => {
-        api.idToken = t
-        setIdToken(t)
-      }} setProfile={setProfile}/>
       <section className='app-content'>
         <FileExplorer
           idToken={idToken}
