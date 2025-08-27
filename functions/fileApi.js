@@ -7,7 +7,7 @@ const DEFAULT_SETTINGS = {
   cdnAdmins: ''
 }
 
-const bucket = new Storage().bucket('cf-on-k8s-wg-test-bucket')
+const bucket = new Storage().bucket(process.env.BUCKET_NAME)
 const CDN_URL = process.env.CDN_URL || null
 const DASHBOARD_ORIGIN = process.env.DASHBOARD_ORIGIN || '*'
 
