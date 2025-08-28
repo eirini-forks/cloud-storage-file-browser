@@ -1,3 +1,11 @@
 #!/bin/bash
 
-pack build --builder=gcr.io/buildpacks/builder korifi/bucket-api:$(uuidgen)
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+pushd $SCRIPT_DIR
+{
+  pack build --builder=gcr.io/buildpacks/builder korifi/bucket-api:$(uuidgen)
+}
+popd
