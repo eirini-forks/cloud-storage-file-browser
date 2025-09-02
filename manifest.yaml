@@ -1,13 +1,6 @@
 ---
 applications:
 - name: file-browser
-  path: ./app/build
-  buildpacks:
-  - paketo-buildpacks/web-servers
-  env:
-    BP_WEB_SERVER: httpd
-    BP_WEB_SERVER_ROOT: .
-- name: file-browser-backend
   path: ./backend
   buildpacks:
   - paketo-buildpacks/nodejs

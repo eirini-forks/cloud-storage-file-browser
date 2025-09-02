@@ -1,9 +1,0 @@
----
-applications:
-- name: file-browser-backend
-  path: .
-  buildpacks:
-  - paketo-buildpacks/nodejs
-  services:
-  - mystorage
-

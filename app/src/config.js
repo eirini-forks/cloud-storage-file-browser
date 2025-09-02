@@ -5,12 +5,11 @@ export default {
 }
 
 async function getConfig() {
-  const url = "https://file-browser-backend.cfday.korifi.cf-app.com/api/config";
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
+  const response = await fetch("/api/config");
+  if (!response.ok) {
+    throw new Error(`Response status: ${response.status}`);
+  }
 
-    const result = await response.json();
-    return result
+  const result = await response.json();
+  return result
 }

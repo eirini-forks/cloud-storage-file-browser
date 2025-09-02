@@ -1,9 +1,0 @@
----
-applications:
-- name: file-browser
-  path: ./build
-  buildpacks:
-  - paketo-buildpacks/web-servers
-  env:
-    BP_WEB_SERVER: httpd
-    BP_WEB_SERVER_ROOT: .

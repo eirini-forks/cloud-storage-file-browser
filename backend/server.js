@@ -1,15 +1,18 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 
-const vcapServices = JSON.parse(process.env.VCAP_SERVICES || "{}");
-const myServiceCreds = vcapServices["my-service-name"]?.[0]?.credentials;
-
 app.get("/api/config", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
   res.json({
       apiEndpoint: JSON.parse(process.env.VCAP_SERVICES).storage[0].credentials.apiEndpoint,
       bucketUrl: JSON.parse(process.env.VCAP_SERVICES).storage[0].credentials.bucketUrl
   });
+});
+
+// Serve React build
+app.use(express.static(path.join(__dirname, './build')));
+app.get(/.*/, (req, res) => {
+  res.sendFile(path.join(__dirname, './build', 'index.html'));
 });
 
 app.listen(process.env.PORT || 3000);
