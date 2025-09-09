@@ -4,6 +4,4 @@ applications:
   path: ./backend
   buildpacks:
   - paketo-buildpacks/nodejs
-  services:
-  - mystorage
 
