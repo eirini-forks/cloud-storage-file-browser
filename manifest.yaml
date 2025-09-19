@@ -4,4 +4,6 @@ applications:
   path: ./backend
   buildpacks:
   - paketo-buildpacks/nodejs
+  disk_quota: 256M
+  memory: 128M
 
