@@ -1,3 +1,10 @@
+> This is a fork of [cloud-storage-file-browser](https://github.com/bashbaugh/cloud-storage-file-browser) meant to be used in the context of [this repo](https://github.com/eirini-forks/cfday-europe-2025)
+> Notable changes:
+> - Remove authentication for the sake of simplicity
+> - Make app consumable in Cloud Foundry
+>   - Add manifest for cf push
+>   - Add support for the VCAP_SERVICES env var
+> - Optimize app for fast cf push experience
 # GCP Storage File Browser
 
 A lightweight file management wrapper for Google Cloud Storage made with React.js and react-semantic-ui. Not better than the  official browser built into the GCP dashboard, but if you just need a simple UI to upload and download files to a storage bucket (perhaps one attached to the GCP CDN or Cloudflare) and don't need complex permissions or retention controls then this one loads faster and looks nicer, in my opinion.
@@ -37,7 +44,7 @@ Along with the React app, you'll also need to set up the API and OAuth screen.
 The google sign-in plugin in the web app requires users to sign in to their Google account, obtaining an OAuth ID token that gets sent to the cloud functions API where it's used to verify the user's email. In order for it to work you need to register an OAuth client and consent screen on GCP.
 
 1. First, create an OAuth Consent screen. You can do this by navigating to the [API Oauth consent screen](https://console.cloud.google.com/apis/credentials/consent) page.
-2. Choose "external user" type, enter a name like "File Browser", and enter the domain/subdomain where you want to host the file manager for all the URL fields (except `authorized domains`, where you'll need to a top-level domain that you've verified in the [search console](https://search.google.com/search-console)). 
+2. Choose "external user" type, enter a name like "File Browser", and enter the domain/subdomain where you want to host the file manager for all the URL fields (except `authorized domains`, where you'll need to a top-level domain that you've verified in the [search console](https://search.google.com/search-console)).
 3. For the scopes section, just add the `userinfo.email` and `userinfo.profile` scopes. Don't add any additional scopes or info or you'll be required to go through the verification process with Google.
 3. Once you create the consent screen, navigate to the [credentials page](https://console.cloud.google.com/apis/credentials) and select Create Credentials -> OAuth Client ID.
 4. Choose web application and add your file manager domain/subdomain (including protocol) to the "Authorized JavaScript Origins". Under "Authorized redirect URIs," add the URL to the page you want your file dashboard to be hosted at. You will most likely need to include the final slash at the end of the domain (it's very picky). Finally, click Create. You might want to copy the OAuth Client ID that is generated as you'll need it for the next steps.
@@ -77,14 +84,14 @@ Click deploy, and after several seconds hopefully your API will be ready!
 
 ### Configuring the App
 
-In the future, you may be able to just create a single HTML page for the React app but for now you'll have to clone this repo and build and host it yourself. 
+In the future, you may be able to just create a single HTML page for the React app but for now you'll have to clone this repo and build and host it yourself.
 
 Clone the repo and cd into the app directory, then make a copy of the `src/_config.js` at `src/config.js` file so that you can edit it:
 
     git clone https://github.com/scitronboy/cloud-storage-file-browser.git
     cd cloud-storage-file-browser/app
     cp src/_config.js src/config.js
-    
+
 Then, open the `src/config.js` file in an editor or `nano` and replace each property as instructed by the comments. Make sure to replace `GoogleClientId` with the OAuth client ID from the authorization step and `APIEndpoint` with the url to your cloud function from the API step.
 
 Once you finish setting the config, install the dependencies and build the app with:
@@ -95,7 +102,7 @@ Once you finish setting the config, install the dependencies and build the app w
 Then, you can take the compiled `app/build` directory and upload it to whichever hosting service you prefer! As mentioned previously I use a separate subdomain with Cloudflare workers, but you could also use Netlify/Vercel/something on GCP/etc.
 
 Note that if you want to upload it to a subdirectory (of your CDN for example) you may need to make a few React configuration changes.
-    
+
 ---
 
 If you have any questions or run into any problems or need help hosting it, open an issue (or email me at `scitronboy[at]gmail[dot]com`).
